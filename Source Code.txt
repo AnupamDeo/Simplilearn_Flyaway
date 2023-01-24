@@ -1,0 +1,784 @@
+Welcome Page.html
+-----------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+<style type="text/css">
+	body{
+		background-image: url("Flight_welcome (2).jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+}
+</style>
+</head>
+<body>
+<center>
+<h1 style="font-family: Georgia;">Welcome to FlyAway</h1>
+
+<form action="Homepage.html">
+
+<input type="submit" value="Search Flights"><br><br>
+</form>
+
+<form action="Admin.html">
+
+<input type="submit" value="Admin Login">
+</form>
+
+</center>
+</body>
+</html>
+
+----------------------------------------------
+Homepage.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FlyAway</title>
+<style type="text/css">
+	body{
+		background-image: url("HomePage_Modified.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+}
+</style>
+</head>
+<body>
+<center>
+	<h1 style="font-family: Georgia;">Search Flights</h1>
+	
+	<form action="AvailableFlights.jsp">
+	
+	<label for="source">Source:</label>
+  	<select name="source" id="source">
+    	<option value="kolkata">Kolkata</option>
+    	<option value="delhi">Delhi</option>
+    	<option value="mumbai">Mumbai</option>
+    	<option value="hyderabad">Hyderabad</option>
+    	<option value="bangalore">Bangalore</option>
+  	</select>
+  	
+  	<label for="dest">Destination:</label>
+  	<select name="dest" id="dest">
+    	<option value="kolkata">Kolkata</option>
+    	<option value="delhi">Delhi</option>
+    	<option value="mumbai">Mumbai</option>
+    	<option value="hyderabad">Hyderabad</option>
+    	<option value="bangalore">Bangalore</option>
+  	</select>
+	
+	Date: <input type="date" name="date"><br><br>
+	
+	<label for="persons">No. of Persons:</label>
+  	<select name="persons" id="persons">
+    	<option value="1">1</option>
+    	<option value="2">2</option>
+    	<option value="3">3</option>
+    	<option value="4">4</option>
+    	<option value="5">5</option>
+    	<option value="6">6</option>
+  	</select><br><br>
+	
+	<input type="submit" value="Proceed">
+	</form>
+
+</center>
+</body>
+</html>
+-------------------------------------------------------
+AvailableFlights.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.sql.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Available Flight</title>
+<style type="text/css">
+	body{
+		background-image: url("Available_flights1.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+}
+</style>
+</head>
+<body>
+<center>
+<h1>Available Flights</h1>
+<%!
+Connection con;
+PreparedStatement pstmt;
+%>
+<%
+	
+	String source=request.getParameter("source");
+	String dest= request.getParameter("dest");
+	String date= request.getParameter("date");
+
+	if(source.equalsIgnoreCase(dest) || date.equals("")){
+		response.sendRedirect("Homepage.html");
+	}
+	
+
+	try{
+		Class.forName("com.mysql.jdbc.Driver");
+		con= DriverManager.getConnection("jdbc:mysql://localhost:3306/anupam","root","admin123");
+		pstmt=con.prepareStatement("insert into intial_details values(?,?,?)");
+		pstmt.setString(1, source);
+		pstmt.setString(2, dest);
+		pstmt.setString(3, date);
+
+		pstmt.execute();
+		System.out.println("Storing initial details into DB...");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e);
+
+	}
+	
+	try{
+		Class.forName("com.mysql.jdbc.Driver");
+		con= DriverManager.getConnection("jdbc:mysql://localhost:3306/anupam","root","admin123");
+		Statement stmt=con.createStatement();
+		ResultSet rs=stmt.executeQuery("Select * from _Flyaway_flights");
+		while(rs.next()){
+			if(source.equalsIgnoreCase(rs.getString(1)) && dest.equalsIgnoreCase(rs.getString(2))){
+				out.println("Source: "+rs.getString(1));
+				out.print("<br/>");
+				out.print("<br/>");
+				out.println("Destination: "+rs.getString(2));
+				out.print("<br/>");
+				out.print("<br/>");
+				out.println("Airline: "+rs.getString(3));
+				out.print("<br/>");
+				out.print("<br/>");
+				out.println("Ticket Price: "+rs.getInt(4));
+				out.print("<br/>");
+				out.print("<br/>");
+				out.println("Date: "+date);
+				out.print("<br/>");
+				out.print("<br/>");
+				out.println("Departure: "+rs.getString(5));
+				out.print("<br/>");
+				out.print("<br/>");
+			}
+		
+		}
+		System.out.println("Displaying flights...");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e);
+
+	}
+%>
+<form action="Book.html">
+<input type="submit" value="Book Flight">
+</form>
+</center>
+</body>
+</html>
+-----------------------------------------------------------------------------
+Book.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Register Page</title>
+<style type="text/css">
+	body{
+		background-image: url("Register.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+</style>
+</head>
+<body>
+<center>
+	<h1>Register</h1>
+
+	<form action="Book.jsp">
+
+	<p style="text-align:center;">First Name: <input type="text" name="fname"></p>
+	<p style="text-align:center;">Last Name: <input type="text" name="lname"></p>
+	<p style="text-align:center;">Mobile no:  <input type="text" name="mobile"></p>
+	<p style="text-align:center;">Email id: <input type="text" name="email"></p>
+	<label for="source">Source:</label>
+  	<select name="source" id="source">
+    	<option value="kolkata">Kolkata</option>
+    	<option value="delhi">Delhi</option>
+    	<option value="mumbai">Mumbai</option>
+    	<option value="hyderabad">Hyderabad</option>
+    	<option value="bangalore">Bangalore</option>
+  	</select>
+	<label for="dest">Destination:</label>
+  	<select name="dest" id="dest">
+    	<option value="kolkata">Kolkata</option>
+    	<option value="delhi">Delhi</option>
+    	<option value="mumbai">Mumbai</option>
+    	<option value="hyderabad">Hyderabad</option>
+    	<option value="bangalore">Bangalore</option>
+  	</select>
+	
+	<p style="text-align:center;">Persons: <input type="text" name="persons"></p>
+	<p style="text-align:center;">Date: <input type="date" name="date"></p>
+	
+	
+	<h1>Payment</h1>
+
+	<p style="text-align:center;">Card No.<input type="text" name="card"></p>
+	<p style="text-align:center;">Card Holder's Name:<input type="text" name="holder"></p>
+	<p style="text-align:center;">Month: <input type="text" name="month"></p>
+	<p style="text-align:center;">Year: <input type="text" name="year"></p>
+	<p style="text-align:center;">CVV no. <input type="text" name="cvv"></p>
+	<p style="text-align:center;"><input type="submit" value="Confirm"></p>
+
+	</form>
+</center>
+</body>
+</html>
+-----------------------------------------
+Book.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.sql.*"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment Page</title>
+<style type="text/css">
+	body{
+		background-image: url("BookingConfirm.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+</style>
+</head>
+<body>
+<center>
+<h1>Booking Confirmed</h1>
+<%!
+Connection con;
+PreparedStatement pstmt;
+%>
+<%
+	String source=request.getParameter("source");
+	String dest= request.getParameter("dest");
+	String fname=request.getParameter("fname");
+	String lname= request.getParameter("lname");
+	long mobile= Long.parseLong(request.getParameter("mobile"));
+	String email= request.getParameter("email");
+	int persons= Integer.parseInt(request.getParameter("persons"));
+	String date= request.getParameter("date");
+	
+	if(source.equalsIgnoreCase(dest) || date.equals("") || fname.equals("") || lname.equals("") || email.equals(""))
+	{
+		response.sendRedirect("Book.html");
+	}
+	
+	try{
+		Class.forName("com.mysql.jdbc.Driver");
+		con= DriverManager.getConnection("jdbc:mysql://localhost:3306/anupam","root","admin123");
+		pstmt=con.prepareStatement("insert into user values(?,?,?,?,?)");
+		pstmt.setString(1, fname);
+		pstmt.setString(2, lname);
+		pstmt.setLong(3, mobile);
+		pstmt.setString(4, email);
+		pstmt.setInt(5, persons);
+		
+		pstmt.execute();
+		System.out.println("Added user details...");
+	}
+	catch(Exception e)
+	{
+		System.out.println(e);
+
+	}
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+	Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/anupam", "root","admin123");
+		Statement stmt=con.createStatement();
+		ResultSet rs=stmt.executeQuery("Select * from available_flights");
+			while(rs.next()){
+				if(source.equalsIgnoreCase(rs.getString(1)) && dest.equalsIgnoreCase(rs.getString(2)))
+				{
+				
+					out.println("Source: "+rs.getString(1));
+					out.print("<br/>");
+					out.println("Destination: "+rs.getString(2));
+					out.print("<br/>");
+					out.println("Airline: "+rs.getString(3));
+					out.print("<br/>");
+					out.println("Total Ticket Price: "+(rs.getInt(4))*persons);
+					out.print("<br/>");
+					out.println("Date: "+date);
+					out.print("<br/>");
+					out.println("Departure: "+rs.getString(5));
+					out.print("<br/>"); 
+					out.println("First Name: "+ fname); 
+					out.print("<br/>");
+					out.println("Last Name: "+ lname);
+					out.print("<br/>");
+					out.println("Mobile no: "+ mobile);
+					out.print("<br/>");
+					out.println("Email id: "+ email);
+					out.print("<br/>");
+					out.print("<br/>");
+					
+				}
+			 }
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		} 
+		
+		long card= Long.parseLong(request.getParameter("card"));
+		String holder= request.getParameter("holder");
+		int month= Integer.parseInt(request.getParameter("month"));
+		int year= Integer.parseInt(request.getParameter("year"));
+		int cvv= Integer.parseInt(request.getParameter("cvv"));
+		
+		if(holder.equals("")){
+			response.sendRedirect("Book.html");
+		}
+		 try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con= DriverManager.getConnection("jdbc:mysql://localhost:3306/flyaway","root","root");
+			pstmt=con.prepareStatement("insert into payment values(?,?,?,?,?)");
+			pstmt.setLong(1, card);
+			pstmt.setString(2, holder);
+			pstmt.setInt(3, month);
+			pstmt.setInt(4, year);
+			pstmt.setInt(5, cvv);
+			
+			pstmt.execute();
+			System.out.println("Payment done");
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		} 
+%>
+<form action="Welcome.html">
+<input type="submit" value="Home">
+</form>
+</center>
+</body>
+</html>
+----------------------------------------------------
+admin.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	body{
+		background-image: url("Amin_login (2).jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+}
+</style>
+</head>
+<body>
+<center>
+<h1>Admin Login</h1>
+
+<form action="AdminWelcome.jsp">
+
+Username: <input type="text" name="username"><br><br>
+Password: <input type="password" name="upass"><br><br>
+<input type="submit" value="Sign in">
+</form>
+
+</center>
+</body>
+</html>
+-------------------------------------------------
+AdminHome.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AdminHome</title>
+<style type="text/css">
+	body{
+		background-image: url("baHpXzf.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		}
+</style>
+</head>
+<body>
+<center>
+<h1>Admin Home</h1>
+	
+	<form action="ChangePassword.html">
+	<input type="submit" value="Change Password"><br><br>
+	</form>
+	
+	<form action="SourceDestination.html">
+	<input type="submit" value="Source and Destination"><br><br>
+	</form>
+	
+	<form action="Airlines.html">
+	<input type="submit" value="Airlines"><br><br>
+	</form>
+	
+	<form action="Flights.html">
+	<input type="submit" value="Flights"><br><br>
+	</form>
+	
+	<form action="Welcome.html">
+	<input type="submit" value="Logout"><br><br>
+	</form>
+</center>
+</body>
+</html>
+---------------------------------------------------
+Airlines.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>List Of Airlines</title>
+<style type="text/css">
+	body{
+		background-image: url("AirlineNew.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		}
+</style>
+</head>
+<body>
+<center>
+<br><br><br><br><br><br><br><br>
+<table border="1">
+	<thead>
+		<tr>
+			<th>Airlines</th>
+		</tr>
+	</thead>
+  	<tbody>
+  		<tr>
+  			<td>FlyAway FKO2DE</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FKO2MU</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FKO2HY</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FKO2BA</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FDE2KO</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FDE2MU</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FDE2HY</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FDE2BA</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FMU2DE</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FMU2KO</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FMU2HY</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FMU2BA</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FHY2DE</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FHY2KO</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FHY2MU</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FHY2BA</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FBA2DE</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FBA2MU</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FBA2KO</td>
+  		</tr>
+  		<tr>
+  			<td>FlyAway FBA2HY</td>
+  		</tr>
+  		
+  	</tbody>
+</table><br><br>
+
+
+<form action="AdminHome.html">
+	<input type="submit" value="Home">
+	</form>
+</center>
+</body>
+</html>
+-----------------------------------
+Flights.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>List Of Airlines</title>
+<style type="text/css">
+	body{
+		background-image: url("Flightsnew.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		}
+</style>
+</head>
+<body>
+<center>
+<br><br><br><br><br><br><br><br>
+<table border="1">
+
+	<thead>
+		<tr>
+			<th>Source</th>
+			<th>Destination</th>
+			<th>Airlines</th>
+			<th>Ticket Price</th>
+			<th>Time</th>
+		</tr>
+	</thead>
+  	<tbody>
+  		<tr>
+  			<td>Kolkata</td>
+  			<td>Delhi</td>
+  			<td>FlyAway FKO2DE</td>
+  			<td>Rs.3500</td>
+  			<td>11:00am</td>
+  		</tr>
+  		<tr>
+  			<td>Kolkata</td>
+  			<td>Mumbai</td>
+  			<td>FlyAway FKO2MU</td>
+  			<td>Rs.5000</td>
+  			<td>14:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Kolkata</td>
+  			<td>Hyderabad</td>
+  			<td>FlyAway FKO2HY</td>
+  			<td>Rs.4000</td>
+  			<td>17:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Kolkata</td>
+  			<td>Bangalore</td>
+  			<td>FlyAway FKO2BA</td>
+  			<td>Rs.4500</td>
+  			<td>23:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Delhi</td>
+  			<td>Kolkata</td>
+  			<td>FlyAway FDE2KO</td>
+  			<td>Rs.4500</td>
+  			<td>07:30am</td>
+  		</tr>
+  		<tr>
+  			<td>Delhi</td>
+  			<td>Mumbai</td>
+  			<td>FlyAway FDE2MU</td>
+  			<td>Rs.3000</td>
+  			<td>09:00am</td>
+  		</tr>
+  		<tr>
+  			<td>Delhi</td>
+  			<td>Hyderabad</td>
+  			<td>FlyAway FDE2HY</td>
+  			<td>Rs.3500</td>
+  			<td>12:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Delhi</td>
+  			<td>Bangalore</td>
+  			<td>FlyAway FDE2BA</td>
+  			<td>Rs.4000</td>
+  			<td>15:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Mumbai</td>
+  			<td>Delhi</td>
+  			<td>FlyAway FMU2DE</td>
+  			<td>Rs.4500</td>
+  			<td>16:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Mumbai</td>
+  			<td>Kolkata</td>
+  			<td>FlyAway FMU2KO</td>
+  			<td>Rs.5000</td>
+  			<td>19:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Mumbai</td>
+  			<td>Hyderabad</td>
+  			<td>FlyAway FMU2HY</td>
+  			<td>Rs.3000</td>
+  			<td>04:30am</td>
+  		</tr>
+  		<tr>
+  			<td>Mumbai</td>
+  			<td>Bangalore</td>
+  			<td>FlyAway FMU2BA</td>
+  			<td>Rs.3500</td>
+  			<td>06:00am</td>
+  		</tr>
+  		<tr>	
+  			<td>Hyderabad</td>
+  			<td>Delhi</td>
+  			<td>FlyAway FHY2DE</td>
+  			<td>Rs.3500</td>
+  			<td>11:30am</td>
+  		</tr>
+  		<tr>
+  			<td>Hyderabad</td>
+  			<td>Kolkata</td>
+  			<td>FlyAway FHY2KO</td>
+  			<td>Rs.5000</td>
+  			<td>12:30pm</td>
+  		</tr>
+  		<tr>
+  			<td>Hyderabad</td>
+  			<td>Mumbai</td>
+  			<td>FlyAway FHY2MU</td>
+  			<td>Rs.4500</td>
+  			<td>18:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Hyderabad</td>
+  			<td>Bangalore</td>
+  			<td>FlyAway FHY2BA</td>
+  			<td>Rs.3000</td>
+  			<td>22:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Bangalore</td>
+  			<td>Delhi</td>
+  			<td>FlyAway FBA2DE</td>
+  			<td>Rs.5000</td>
+  			<td>04:00am</td>
+  		</tr>
+  		<tr>
+  			<td>Bangalore</td>
+  			<td>Mumbai</td>
+  			<td>FlyAway FBA2MU</td>
+  			<td>Rs.4500</td>
+  			<td>20:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Bangalore</td>
+  			<td>Kolkata</td>
+  			<td>FlyAway FBA2KO</td>
+  			<td>Rs.5500</td>
+  			<td>13:00pm</td>
+  		</tr>
+  		<tr>
+  			<td>Bangalore</td>
+  			<td>Hyderabad</td>
+  			<td>FlyAway FBA2HY</td>
+  			<td>Rs.3000</td>
+  			<td>16:30pm</td>
+  		</tr>
+  		
+  	</tbody>
+  	
+</table><br><br>
+<form action="AdminHome.html">
+	<input type="submit" value="Home">
+	</form>
+</center>
+</body>
+</html>
+----------------------------------------------
+SourceDestination.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Source & Destination</title>
+<style type="text/css">
+	body{
+		background-image: url("source&dest.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		}
+</style>
+</head>
+<body>
+<center>
+<br><br><br>
+<table border="1">
+	<thead>
+		<tr>
+			<th>Source</th>
+			<th>Destination</th>
+		</tr>
+	</thead>
+  	<tbody>
+  		<tr>
+  			<td>Kolkata</td>
+  			<td>Delhi, Mumbai, Hyderabad, Bangalore</td>
+  		</tr>
+  		<tr>
+  			<td>Delhi</td>
+  			<td>Kolkata, Mumbai, Hyderabad, Bangalore</td>
+  		</tr>
+  		<tr>
+  			<td>Mumbai</td>
+  			<td>Kolkata, Delhi, Hyderabad, Bangalore</td>
+  		</tr>
+  		<tr>
+  			<td>Hyderabad</td>
+  			<td>Kolkata, Delhi, Mumbai, Bangalore</td>
+  		</tr>
+  		<tr>
+  			<td>Bangalore</td>
+  			<td>Kolkata, Delhi, Mumbai, Hyderabad</td>
+  		</tr>
+  		
+  	</tbody>
+</table><br><br>
+<form action="AdminHome.html">
+	<input type="submit" value="Home">
+	</form>
+</center>
+</body>
+</html>
+--------------------------------------------------------------------

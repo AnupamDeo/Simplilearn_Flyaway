@@ -1,0 +1,39 @@
+     Flow of the project:-
+
+
+***************************************************************To book a flght***********************************************************************
+
+1)Welcome Page - The program will be started from the 'Welcome.html' page. It will display a welcome page that has the 'search flights' button. It also has an 'admin' button that allows the admin to login.
+
+
+2)Search Flights - Once the user clicks on the 'search flights' button it will display the options for the user to choose the source, destination and date of the flight.
+
+3)Available Flights - Once the user clicks on the proceed button it will display the available flights along with the necessary details.
+
+4)Register and Payment page - When the user clicks on the 'Book flight' button it will take the user to a page where the user will have to enter their personal details and also enter their card details to make the payment.
+
+5)Booking Confirmed - Finally after the user clicks on the 'confirm' button it will display the entire flight details.
+
+
+
+*************************************************************To use project as Admin*****************************************************************
+
+
+1)Welcome Page - The program will be started from the 'Welcome.html' page. It will display a welcome page that has the 'search flights' button. It also has an 'admin' button that allows the admin to login.
+
+2)Admin Login - Once the user clicks on 'Admin Login' it will direct the user to a login page where the user has to give the username and password to login as Admin. The default username and password is: 
+
+	username - muzam
+	password - pass789
+
+3)Admin home - Once the user logins as Admin, they will be directed to an 'Admin Home' page. Here the user will have the option to change password, view source and destination, view airlines, view all flight details and lastly there is also an option to logout.
+
+4)Change Password - If the user selects the 'Change Password' option they will be directed to a page where they can enter the username and old password and then they can craete a new password. By clicking on 'confirm', the password will be changed.
+
+5)Source and Destination - If the user selects the 'Source and Destination' option they will directed to a page where they can see the list of all the source and their destinations.
+
+6)Airlines - If the user selects the 'Airlines' option they will directed to a page where they can see the list of all the airlines that are available.
+
+7)Flights - If the user selects the 'Flights' option they will directed to a page where they can see the list of all the flights which includes the details of the source, destination, airline names, ticket price, time of departure of flight.
+
+8)Logout - Finally, there is a logout page which will take the user back to the 'Welcome' page.
